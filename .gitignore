@@ -1,0 +1,17 @@
+# build outputs
+build/
+out/
+*.o
+*.obj
+*.elf
+*.bin
+*.asm
+*.ll
+
+# editor
+.vscode/
+.idea/
+
+# system
+.DS_Store
+Thumbs.db
