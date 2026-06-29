@@ -29,6 +29,58 @@
 5. 用这门中文语言重写编译器，完成自举。
 6. 最后探索中文汇编、中文字节码、中文指令集表示。
 
+## 当前进展
+
+仓库已经从纯规划进入第一个可运行原型：
+
+```text
+src/hancc.cpp
+```
+
+当前 `hancc` 是一个极小的 C++17 编译器，支持：
+
+```text
+整 / 返
+无参数函数
+十进制整数
+括号表达式
++ - * /
+// 行注释
+```
+
+可以把：
+
+```han
+整 主() {
+    返 7;
+}
+```
+
+编译成 RISC-V 汇编。
+
+## 构建
+
+```bash
+cmake -S . -B build
+cmake --build build
+```
+
+## 使用
+
+输出到标准输出：
+
+```bash
+./build/hancc examples/hello.han
+```
+
+输出到文件：
+
+```bash
+./build/hancc examples/hello.han -o hello.s
+```
+
+当前输出为 RV64 风格汇编，后续会增加 RV32 选项。
+
 ## 不做什么
 
 本项目暂时不追求自然语言编程。
@@ -82,11 +134,15 @@
 - [RISC-V 后端计划](docs/03_riscv_backend.md)
 - [中文 IR、中文汇编与中文字节码](docs/04_chinese_ir_and_asm.md)
 - [自举计划](docs/05_bootstrap_plan.md)
+- [下一步开发任务](docs/06_next_steps.md)
+- [第一版 hancc 原型](docs/07_first_compiler.md)
 
 ## 示例
 
 - [hello.han](examples/hello.han)
 - [factorial.han](examples/factorial.han)
+
+注意：`factorial.han` 是阶段目标示例，当前第一版 `hancc` 还不支持函数参数、递归和 `若`。
 
 ## 项目原则
 
@@ -105,11 +161,12 @@
 3. 中文字节码 / 虚拟机指令。
 4. 最终映射到真实 RISC-V 机器码。
 
-## 推荐初始目录
+## 目录结构
 
 ```text
 han-riscv/
   README.md
+  CMakeLists.txt
   docs/
     00_project_vision.md
     01_language_plan.md
@@ -117,36 +174,13 @@ han-riscv/
     03_riscv_backend.md
     04_chinese_ir_and_asm.md
     05_bootstrap_plan.md
+    06_next_steps.md
+    07_first_compiler.md
   examples/
     hello.han
     factorial.han
   src/
-    lexer/
-    parser/
-    ast/
-    sema/
-    ir/
-    opt/
-    backend/riscv/
+    hancc.cpp
   runtime/
   tests/
-```
-
-## 当前状态
-
-项目处于规划期。第一步目标是实现最小中文 C 子集：
-
-```han
-整 主() {
-    返 7;
-}
-```
-
-并编译到 RISC-V 汇编：
-
-```asm
-.globl main
-main:
-    li a0, 7
-    ret
 ```
